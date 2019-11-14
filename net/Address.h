@@ -1,7 +1,9 @@
 #ifndef ETHAN_NET_ADDRESS_
 #define ETHAN_NET_ADDRESS_
 
-#include <momory>
+#include <memory>
+#include <string>
+#include <sys/un.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -25,12 +27,12 @@ public:
 class IPv4Addr : public Address {
 public:
     typedef std::shared_ptr<IPv4Addr> ptr;
-    IPv4Addr(uint32_t addr = INADDR_ANY, uint32_t port = 0);
+    IPv4Addr(const std::string &addr = "0.0.0.0", uint16_t port = 0);
 
     sockaddr *getAddr() const override;
     socklen_t getAddrLen() const override;
-    uint32_t getPort() const;
-    void setPort(uint32_t p);
+    uint16_t getPort() const;
+    void setPort(uint16_t);
 
 private:
     sockaddr_in addr;
@@ -39,12 +41,12 @@ private:
 class IPv6Addr : public Address {
 public:
     typedef std::shared_ptr<IPv6Addr> ptr;
-    IPv6Addr(uint32_t addr = INADDR_ANY, uint32_t port = 0);
+    IPv6Addr(const std::string &addr = "0.0.0.0", uint16_t port = 0);
 
     sockaddr *getAddr() const override;
     socklen_t getAddrLen() const override;
-    uint32_t getPort() const;
-    void setPort(uint32_t p);
+    uint16_t getPort() const;
+    void setPort(uint16_t);
 
 private:
     sockaddr_in6 addr;
@@ -60,6 +62,7 @@ public:
 
 private:
     sockaddr_un addr;
+    int length;
 };
 
 }

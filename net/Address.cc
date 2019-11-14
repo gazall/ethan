@@ -1,10 +1,12 @@
 #include "Address.h"
 #include <string.h>
+#include <arpa/inet.h>
+#include <stddef.h>
 
-using namesapce ethan;
+using namespace ethan;
 
 int Address::getFamily() const {
-    return getAddr()->sin_family;
+    return getAddr()->sa_family;
 }
 
 bool Address::operator<(const Address &a) const {
@@ -22,60 +24,68 @@ bool Address::operator<(const Address &a) const {
 
 bool Address::operator==(const Address &a) const {
     return getAddrLen() == a.getAddrLen() &&
-            memcmp(getAddr(), a.getAddr()) == 0;
+            memcmp(getAddr(), a.getAddr(), getAddrLen()) == 0;
 }
 
 bool Address::operator>(const Address &a) const {
     return !(*this < a); 
 }
 
-IPv4Addr::IPv4Addr(uint32_t addr, uint32_t port) {
+IPv4Addr::IPv4Addr(const std::string &addr_, uint16_t port_) {
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = addr;
-    addr.sin_port = port;
+    addr.sin_addr.s_addr = inet_addr(addr_.c_str());
+    addr.sin_port = htonl(port_);
 }
 
 sockaddr *IPv4Addr::getAddr() const {
-
+    return (sockaddr *)(&addr);
 }
 
 socklen_t IPv4Addr::getAddrLen() const {
+    return sizeof(addr);
 }
 
-uint32_t IPv4Addr::getPort() const {
+uint16_t IPv4Addr::getPort() const {
 }
 
-void IPv4Addr::setPort(uint32_t p) {
+void IPv4Addr::setPort(uint16_t p) {
 }
 
-IPv6Addr::IPv6Addr(uint32_t addr, uint32_t port) {
+IPv6Addr::IPv6Addr(const std::string &addr_, uint16_t port_) {
     memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = addr;
-    addr.sin_port = port;
+    addr.sin6_family = AF_INET6;
+    memcpy(&addr.sin6_addr.s6_addr, addr_.c_str(), sizeof(addr.sin6_addr.s6_addr));
+    addr.sin6_port = htons(port_);
 }
 
 sockaddr *IPv6Addr::getAddr() const {
-
+    return (sockaddr *)(&addr);
 }
 
 socklen_t IPv6Addr::getAddrLen() const {
+    return sizeof(addr);
 }
 
-uint32_t IPv6Addr::getPort() const {
+uint16_t IPv6Addr::getPort() const {
 }
 
-void IPv6Addr::setPort(uint32_t p) {
+void IPv6Addr::setPort(uint16_t p) {
 }
 
 UnixAddr::UnixAddr(const std::string &path) {
+   memset(&addr, 0, sizeof(addr)); 
+
+   addr.sun_family = AF_UNIX;
+   int len = std::min(path.size(), sizeof(addr.sun_path));
+   memcpy(addr.sun_path, path.c_str(), len);
+   length = offsetof(sockaddr_un, sun_path) + strlen(addr.sun_path) + 1;
 }
 
 sockaddr *UnixAddr::getAddr() const {
-
+    return (sockaddr *)(&addr);
 }
 
 socklen_t UnixAddr::getAddrLen() const {
-
+    return length;
 }
