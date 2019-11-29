@@ -11,7 +11,7 @@ namespace ethan {
  *server and client use the same Socket class
  *only for tcp
  */
-class Socket : public enable_shared_from_this<Socket> {
+class Socket : public std::enable_shared_from_this<Socket> {
 public:
     typedef std::shared_ptr<Socket> ptr;
     typedef std::weak_ptr<Socket> weak_ptr;
@@ -21,7 +21,7 @@ public:
     Socket(const Socket &other) = delete;
     Socket &operator=(const Socket &other) = delete;
 
-    void bindAndListen(Address::ptr localAddr);
+    bool bindAndListen(Address::ptr localAddr);
     Socket::ptr accept();
     void connect();
 
@@ -35,14 +35,14 @@ public:
     bool isFdValid();
 
     bool isConnected() {
-        return isConnected;
+        return isConnect;
     }
 private:
     int fd = -1; 
     int family = 0;
     int type = 0;
     int protocol = 0;
-    bool isConnected = false;
+    bool isConnect = false;
     Address::ptr localAddr = nullptr; 
     Address::ptr remoteAddr = nullptr; 
 };

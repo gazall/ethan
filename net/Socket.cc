@@ -1,8 +1,11 @@
 #include "Socket.h"
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <errno.h>
+#include <unistd.h>
 
-using namespace std;
+
+using namespace ethan;
 
 Socket::Socket(int family_, int type_, int protocol_) :
     family(family_), type(type_), protocol(protocol_) {
@@ -16,21 +19,21 @@ Socket::~Socket() {
     ::close(fd);
 }
 
-void Socket::bindAndListen(Address::ptr addr) {
+bool Socket::bindAndListen(Address::ptr addr) {
     fd = socket(family, type, protocol); 
     if (fd < 0) {
-        throw  
+        return fd; 
     }
 
     localAddr = addr; 
     int ret = bind(fd, localAddr->getAddr(), localAddr->getAddrLen());
     if (ret < 0) {
-        throw
+        return ret;
     }
 
     ret = listen(fd, SOMAXCONN);
     if (ret < 0) {
-        throw
+        return ret;
     }
 }
 
@@ -46,11 +49,11 @@ bool Socket::isFdValid() {
 
 }
 
-int Socket::send(const char *buf, size_t len, int flag = 0) {
+int Socket::send(const char *buf, size_t len, int flag) {
 
 }
 
-int Socket::recv(char *buf, size_t len, int flag = 0) {
+int Socket::recv(char *buf, size_t len, int flag) {
 
 }
 
