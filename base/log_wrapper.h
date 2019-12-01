@@ -1,7 +1,7 @@
 #ifndef ETHAN_BASE_LOG_WRAPPER_
 #define ETHAN_BASE_LOG_WRAPPER_
 
-#include "base/easylogging++.h"
+#include "base/log/easylogging++.h"
 
 namespace ethan {
 
