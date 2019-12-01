@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 #add_compile_options(-std=c++11)
-SET(CMAKE_CXX_FLAGS -std=c++11)
+SET(CMAKE_CXX_FLAGS "-std=c++11 -g -DELPP_THREAD_SAFE -DELPP_FORCE_USE_STD_THREAD")
 
 PROJECT(ethan)
 INCLUDE_DIRECTORIES(./)
