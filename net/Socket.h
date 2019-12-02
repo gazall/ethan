@@ -2,7 +2,7 @@
 #define ETHAN_NET_SOCKET
 
 #include "Address.h"
-#include <base/NoCopable.h>
+#include <base/NoCopyable.h>
 #include <memory>
 
 namespace ethan {
@@ -13,7 +13,7 @@ namespace ethan {
  *only for tcp
  */
 class Socket : public std::enable_shared_from_this<Socket>
-                , NoCopable {
+                , NoCopyable {
 public:
     typedef std::shared_ptr<Socket> ptr;
     typedef std::weak_ptr<Socket> weak_ptr;
