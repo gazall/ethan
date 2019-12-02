@@ -3,11 +3,11 @@
 
 namespace ethan {
 
-class NoCopable {
+class NoCopyable {
 public:
-    NoCopable() = default;
-    NoCopable(const NoCopable &) = delete;
-    NoCopable &operator=(const NoCopable &) = delete;
+    NoCopyable() = default;
+    NoCopyable(const NoCopyable &) = delete;
+    NoCopyable &operator=(const NoCopyable &) = delete;
 };
 
 }
