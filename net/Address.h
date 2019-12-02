@@ -1,6 +1,7 @@
 #ifndef ETHAN_NET_ADDRESS_
 #define ETHAN_NET_ADDRESS_
 
+#include <base/NoCopable.h>
 #include <memory>
 #include <string>
 #include <sys/un.h>
@@ -10,7 +11,7 @@
 
 namespace ethan {
 
-class Address {
+class Address : public NoCopable {
 public:
     typedef std::shared_ptr<Address> ptr;
     virtual ~Address() {}

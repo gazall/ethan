@@ -1,8 +1,9 @@
 #ifndef ETHAN_NET_SOCKET
 #define ETHAN_NET_SOCKET
 
-#include <memory>
 #include "Address.h"
+#include <base/NoCopable.h>
+#include <memory>
 
 namespace ethan {
 
@@ -11,19 +12,18 @@ namespace ethan {
  *server and client use the same Socket class
  *only for tcp
  */
-class Socket : public std::enable_shared_from_this<Socket> {
+class Socket : public std::enable_shared_from_this<Socket>
+                , NoCopable {
 public:
     typedef std::shared_ptr<Socket> ptr;
     typedef std::weak_ptr<Socket> weak_ptr;
 
     Socket(int family, int type, int protocol); 
     ~Socket();
-    Socket(const Socket &other) = delete;
-    Socket &operator=(const Socket &other) = delete;
 
     bool bindAndListen(Address::ptr localAddr);
     Socket::ptr accept();
-    void connect();
+    bool connect();
 
     int send(const char *buf, size_t len, int flag = 0);
     int recv(char *buf, size_t len, int flag = 0);

@@ -1,9 +1,9 @@
 #include "Socket.h"
+#include "base/log_wrapper.h"
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <errno.h>
 #include <unistd.h>
-
 
 using namespace ethan;
 
@@ -22,26 +22,31 @@ Socket::~Socket() {
 bool Socket::bindAndListen(Address::ptr addr) {
     fd = socket(family, type, protocol); 
     if (fd < 0) {
+        LOG_ERROR << strerror(errno);
         return fd; 
     }
 
     localAddr = addr; 
     int ret = bind(fd, localAddr->getAddr(), localAddr->getAddrLen());
     if (ret < 0) {
+        LOG_ERROR << strerror(errno);
         return ret;
     }
 
     ret = listen(fd, SOMAXCONN);
     if (ret < 0) {
+        LOG_ERROR << strerror(errno);
         return ret;
     }
+
+    return true;
 }
 
 Socket::ptr Socket::accept() {
 
 }
 
-void Socket::connect() {
+bool Socket::connect() {
 
 }
 
