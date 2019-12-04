@@ -11,6 +11,12 @@
 
 namespace ethan {
 
+enum Addr_Type {
+    IPv4,
+    IPv6,
+    UNIX_SOCKET
+};
+
 class Address : public NoCopyable {
 public:
     typedef std::shared_ptr<Address> ptr;
@@ -23,6 +29,11 @@ public:
     bool operator<(const Address &a) const;
     bool operator==(const Address &a) const;
     bool operator>(const Address &a) const;
+    Addr_Type getAddrType() const {
+        return type;
+    }
+protected:
+    Addr_Type type;
 };
 
 class IPv4Addr : public Address {

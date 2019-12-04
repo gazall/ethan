@@ -18,6 +18,7 @@ public:
     typedef std::shared_ptr<Socket> ptr;
     typedef std::weak_ptr<Socket> weak_ptr;
 
+    //throw Exception when socket failed.
     Socket(int family, int type, int protocol); 
     ~Socket();
 
@@ -32,19 +33,19 @@ public:
         fd = acceptFd;
     }
 
-    bool isFdValid();
-
-    bool isConnected() {
-        return isConnect;
+    void setLocalAddr(Address::ptr addr) {
+        localAddr = addr;
+    }
+    void setPeerAddr(Address::ptr addr) {
+        peerAddr = addr;
     }
 private:
     int fd = -1; 
     int family = 0;
     int type = 0;
     int protocol = 0;
-    bool isConnect = false;
     Address::ptr localAddr = nullptr; 
-    Address::ptr remoteAddr = nullptr; 
+    Address::ptr peerAddr = nullptr; 
 };
 
 }

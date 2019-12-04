@@ -36,6 +36,8 @@ IPv4Addr::IPv4Addr(const std::string &addr_, uint16_t port_) {
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = inet_addr(addr_.c_str());
     addr.sin_port = htonl(port_);
+
+    type = IPv4;
 }
 
 sockaddr *IPv4Addr::getAddr() const {
@@ -57,6 +59,8 @@ IPv6Addr::IPv6Addr(const std::string &addr_, uint16_t port_) {
     addr.sin6_family = AF_INET6;
     memcpy(&addr.sin6_addr.s6_addr, addr_.c_str(), sizeof(addr.sin6_addr.s6_addr));
     addr.sin6_port = htons(port_);
+
+    type = IPv6;
 }
 
 sockaddr *IPv6Addr::getAddr() const {
@@ -80,6 +84,8 @@ UnixAddr::UnixAddr(const std::string &path) {
    int len = std::min(path.size(), sizeof(addr.sun_path));
    memcpy(addr.sun_path, path.c_str(), len);
    length = offsetof(sockaddr_un, sun_path) + strlen(addr.sun_path) + 1;
+
+   type = UNIX_SOCKET;
 }
 
 sockaddr *UnixAddr::getAddr() const {
