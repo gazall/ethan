@@ -14,9 +14,7 @@ Socket::Socket(int family_, int type_, int protocol_) :
     family(family_), type(type_), protocol(protocol_) {
     fd = socket(family, type, protocol); 
     if (fd < 0) {
-        std::stringstream ss;
-        ss << "socket failed, " << strerror(strno) << "\n";
-        throw Exception(ss.str());
+        throw Exception(strerror(errno));
     }
 }
 
@@ -24,21 +22,21 @@ Socket::~Socket() {
     ::close(fd);
 }
 
-bool Socket::bindAndListen(Address::ptr addr) {
+void Socket::bindAndListen(Address::ptr addr) {
+    if (nullptr == addr) {
+        throw Exception("localaddr is nullptr.");
+    }
+
     localAddr = addr; 
     int ret = bind(fd, localAddr->getAddr(), localAddr->getAddrLen());
     if (ret < 0) {
-        LOG_ERROR << strerror(errno);
-        return ret;
+        throw Exception(strerror(errno));
     }
 
     ret = listen(fd, SOMAXCONN);
     if (ret < 0) {
-        LOG_ERROR << strerror(errno);
-        return ret;
+        throw Exception(strerror(errno));
     }
-
-    return true;
 }
 
 Socket::ptr Socket::accept() {
@@ -54,19 +52,35 @@ Socket::ptr Socket::accept() {
     return acceptPtr;
 }
 
-bool Socket::connect() {
-
-}
-
-bool Socket::isFdValid() {
-
+bool Socket::connect(Address::ptr peer) {
+    int ret = ::connect(fd, peer->getAddr(), peer->getAddrLen());
+    if (ret < 0) {
+        LOG_ERROR << strerror(errno);
+        return false;
+    }
+    return true;
 }
 
 int Socket::send(const char *buf, size_t len, int flag) {
-
+    int ret = ::send(fd, buf, len, flag);
+    return ret;
 }
 
 int Socket::recv(char *buf, size_t len, int flag) {
+    int ret = ::recv(fd, buf, len, flag);
+    return ret;
+}
+
+void Socket::setAddrReuse() {
+
+}
+
+void Socket::setPortReuse() {
+
+}
+
+
+void Socket::setTcpNoDelay() {
 
 }
 

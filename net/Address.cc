@@ -77,21 +77,3 @@ uint16_t IPv6Addr::getPort() const {
 void IPv6Addr::setPort(uint16_t p) {
 }
 
-UnixAddr::UnixAddr(const std::string &path) {
-   memset(&addr, 0, sizeof(addr)); 
-
-   addr.sun_family = AF_UNIX;
-   int len = std::min(path.size(), sizeof(addr.sun_path));
-   memcpy(addr.sun_path, path.c_str(), len);
-   length = offsetof(sockaddr_un, sun_path) + strlen(addr.sun_path) + 1;
-
-   type = UNIX_SOCKET;
-}
-
-sockaddr *UnixAddr::getAddr() const {
-    return (sockaddr *)(&addr);
-}
-
-socklen_t UnixAddr::getAddrLen() const {
-    return length;
-}

@@ -22,9 +22,9 @@ public:
     Socket(int family, int type, int protocol); 
     ~Socket();
 
-    bool bindAndListen(Address::ptr localAddr);
+    void bindAndListen(Address::ptr localAddr);
     Socket::ptr accept();
-    bool connect();
+    bool connect(Address::ptr peer);
 
     int send(const char *buf, size_t len, int flag = 0);
     int recv(char *buf, size_t len, int flag = 0);
@@ -39,6 +39,10 @@ public:
     void setPeerAddr(Address::ptr addr) {
         peerAddr = addr;
     }
+
+    void setAddrReuse();
+    void setPortReuse();
+    void setTcpNoDelay();
 private:
     int fd = -1; 
     int family = 0;
