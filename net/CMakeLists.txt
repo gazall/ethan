@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 SET(SRC_LIST
     Address.cc
     Socket.cc
+    SocketCtx.cc
+    IOManager.cc
     )
 
 

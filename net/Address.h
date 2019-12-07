@@ -44,7 +44,7 @@ public:
     sockaddr *getAddr() const override;
     socklen_t getAddrLen() const override;
     uint16_t getPort() const;
-    void setPort(uint16_t);
+    void setPort(uint16_t p);
 
 private:
     sockaddr_in addr;
@@ -62,19 +62,6 @@ public:
 
 private:
     sockaddr_in6 addr;
-};
-
-class UnixAddr : public Address {
-public:
-    typedef std::shared_ptr<UnixAddr> ptr;
-    UnixAddr(const std::string &path);
-
-    sockaddr *getAddr() const override;
-    socklen_t getAddrLen() const override;
-
-private:
-    sockaddr_un addr;
-    int length;
 };
 
 }

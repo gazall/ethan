@@ -32,6 +32,9 @@ public:
     void setFd(int acceptFd) {
         fd = acceptFd;
     }
+    int getFd() const {
+        return fd;
+    }
 
     void setLocalAddr(Address::ptr addr) {
         localAddr = addr;
